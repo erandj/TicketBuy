@@ -1,0 +1,136 @@
+﻿<Page x:Class="TicketBuy.PassengerCountPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TicketBuy"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PassengerCountPage">
+
+    <Grid>
+
+        <StackPanel Margin="30,0,0,0">
+            <TextBlock FontSize="20" FontWeight="Bold">Пассажиры</TextBlock>
+
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock FontSize="18">Взрослые</TextBlock>
+                <TextBlock FontSize="14" Foreground="#CC000000">старше 12 лет</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <Button Width="30" Height="30" FontSize="18" Margin="0,0,10,0" Click="CountButton_Click" Tag="-0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value ="{StaticResource SecondColor}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="12"/>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock Margin="0,0,0,4">-</TextBlock>
+                </Button>
+
+                <TextBlock FontSize="18" Text="{Binding AdultCount}" Margin="0,0,10,0"></TextBlock>
+
+                <Button Width="30" Height="30" FontSize="18" Click="CountButton_Click" Tag="+0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value ="{StaticResource SecondColor}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="12"/>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock Margin="0,0,0,4">+</TextBlock>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock FontSize="18">Дети</TextBlock>
+                <TextBlock FontSize="14" Foreground="#CC000000">младше 12 лет</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <Button Width="30" Height="30" FontSize="18" Margin="0,0,10,0" Click="CountButton_Click" Tag="-1">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value ="{StaticResource SecondColor}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="12"/>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock Margin="0,0,0,4">-</TextBlock>
+                </Button>
+
+                <TextBlock FontSize="18" Text="{Binding ChildCount}" Margin="0,0,10,0"></TextBlock>
+
+                <Button Width="30" Height="30" FontSize="18" Click="CountButton_Click" Tag="+1">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value ="{StaticResource SecondColor}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="12"/>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock Margin="0,0,0,4">+</TextBlock>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock FontSize="18">Младенцы</TextBlock>
+                <TextBlock FontSize="14" Foreground="#CC000000">до 2 лет, без места</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,60">
+                <Button Width="30" Height="30" FontSize="18" Margin="0,0,10,0" Click="CountButton_Click" Tag="-2">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value ="{StaticResource SecondColor}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="12"/>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock Margin="0,0,0,4">-</TextBlock>
+                </Button>
+
+                <TextBlock FontSize="18" Text="{Binding InfantCount}" Margin="0,0,10,0"></TextBlock>
+
+                <Button Width="30" Height="30" FontSize="18" Click="CountButton_Click" Tag="+2">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value ="{StaticResource SecondColor}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="12"/>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock Margin="0,0,0,4">+</TextBlock>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Width="100" Height="30" Background="{DynamicResource AttentionColor}" HorizontalAlignment="Left" Click="NextButton_Click" Margin="0,0,30,0">
+                    <TextBlock>Продолжить</TextBlock>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

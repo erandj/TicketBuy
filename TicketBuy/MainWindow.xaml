@@ -1,0 +1,229 @@
+﻿<Window x:Class="TicketBuy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TicketBuy"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="840"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource FirstColor}"
+        ResizeMode="CanMinimize"
+        >
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="207*"/>
+            </Grid.RowDefinitions>
+
+            <!-- SearchBar -->
+            <Grid Background="{StaticResource SecondColor}">
+                <Border Width="670" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="{StaticResource SecondColor}" Background="{StaticResource FirstColor}" BorderThickness="3" CornerRadius="8">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="35"/>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="280"/>
+                            <ColumnDefinition Width="75"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Origin TextBox -->
+                        <TextBox x:Name="tbOrigin" Grid.Column="0" BorderThickness="0" FontSize="20" VerticalContentAlignment="Center" Padding="10,0,0,0">
+                            <TextBox.Style>
+                                <Style>
+                                    <Style.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6, 0, 0, 6"/>
+                                        </Style>
+                                    </Style.Resources>
+                                </Style>
+                            </TextBox.Style>
+                            <TextBox.Text>
+                                <Binding Path="Origin" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBlock IsHitTestVisible="False" Grid.Column="0" Text="Откуда" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=tbOrigin}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+
+                        <!-- Switch Button -->
+                        <Button Grid.Column="1" BorderThickness="0" Click="SwitchButton_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value ="{StaticResource FirstColor}"/>
+                                </Style>
+                            </Button.Style>
+                            <Image Source="Resources/switch.png" Opacity="0.8"></Image>
+                        </Button>
+
+
+                        <!-- Destination TextBox -->
+                        <TextBox x:Name="tbDestination" Text="{Binding Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" BorderThickness="0" FontSize="20" VerticalContentAlignment="Center" Padding="10,0,0,0"></TextBox>
+                        <TextBlock IsHitTestVisible="False" Grid.Column="2" Text="Куда" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=tbDestination}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- Depature and return date -->
+                        <StackPanel Grid.Column="3" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Height="28">
+                                <TextBlock Text="Туда" Width="80" FontSize="18" VerticalAlignment="Center" Padding="4, 0, 0, 0"/>
+                                <DatePicker Name="dpDepatureDate" SelectedDate="{Binding DepatureDate}" Width="200" FontSize="18" BorderThickness="0" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Height="28">
+                                <TextBlock Text="Обратно" Width="80" FontSize="18" VerticalAlignment="Center" Padding="4, 0, 0, 0"/>
+                                <DatePicker Name="dpArrivalDate" SelectedDate="{Binding ArrivalDate}" Width="200" FontSize="18" BorderThickness="0" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+
+
+                        <!-- Search button -->
+                        <Button Grid.Column="5" Width="69" HorizontalAlignment="Left" BorderThickness="1" Click="SearchButton_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value ="{StaticResource AttentionColor}"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource AttentionColor}"/>
+                                    <Style.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="0, 6, 6, 0"/>
+                                        </Style>
+                                    </Style.Resources>
+                                </Style>
+                            </Button.Style>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="22">Найти</TextBlock>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
+            <TextBlock x:Name="tbError" Grid.Row="1" Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" Foreground="Red" Visibility="Hidden"></TextBlock>
+
+            <!-- Content -->
+            <!-- Tickets ListView -->
+            <ListView x:Name="lvFlightTickets" Grid.Row="1">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Ticket template -->
+                        <Border BorderBrush="Gray" BorderThickness="0 1 0 1" Height="130">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="64"/>
+                                    <RowDefinition Height="64"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="210"/>
+                                    <ColumnDefinition Width="613"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Cost StackPanel -->
+                                <Border Grid.Column="0" Grid.Row="0" BorderBrush="Gray" BorderThickness="0, 0, 1, 0">
+                                    <StackPanel VerticalAlignment="Top" Orientation="Vertical">
+                                        <TextBlock Text="{Binding Cost}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <TextBlock Text="{Binding BaggageCost}" FontSize="18" Margin="0, 0, 10, 0" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"></TextBlock>
+                                            <RadioButton GroupName="rbBaggageGroup" VerticalAlignment="Center"></RadioButton>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+
+                                <!-- Buy button -->
+                                <Border Grid.Column="0" Grid.Row="1" BorderBrush="Gray" BorderThickness="0, 0, 1, 0">
+                                    <Button Width="150" Height="44" VerticalAlignment="Center" Click="BuyButton_Click" Tag="{Binding Id}">
+                                        <TextBlock FontSize="18">Выбрать билет</TextBlock>
+                                    </Button>
+                                </Border>
+
+
+                                <!-- First flight info StackPanel -->
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+
+                                    <!-- Departure info StackPanel -->
+                                    <StackPanel Width="100" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                                        <TextBlock Text="{Binding DepartureTime}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="26" Margin="0, 0, 10, 0"></TextBlock>
+                                        <TextBlock Text="{Binding DepartureCity}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="12" Margin="0, 0, 10, 0" Foreground="#FF959AA2"></TextBlock>
+                                        <TextBlock Text="{Binding DepartureDate}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="12" Margin="0, 0, 10, 0" Foreground="#FF959AA2"></TextBlock>
+                                    </StackPanel>
+
+                                    <!-- Flight spot info StackPanel -->
+                                    <Grid Width="320">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="11*"/>
+                                            <RowDefinition Height="5*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Text="{Binding InFlight}" FontSize="12" Width="88" TextAlignment="Center" Foreground="#FF959AA2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0"></TextBlock>
+
+                                        <Image Source="Resources/flight_icon.png" Stretch="UniformToFill" VerticalAlignment="Center" Height="44" Panel.ZIndex="-1"/>
+
+                                        <TextBlock Text="{Binding DepartureCode}" FontSize="12" Grid.Row="1" Width="30" TextAlignment="Left" Margin="17,0,360,0" Foreground="#FF959AA2"></TextBlock>
+                                        <TextBlock Text="{Binding ArrivalCode}" FontSize="12" Grid.Row="1" Width="30" TextAlignment="Right" Margin="371,0,6,0" Foreground="#FF959AA2"></TextBlock>
+                                    </Grid>
+
+                                    <!-- Arrival info StackPanel -->
+                                    <StackPanel Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                                        <TextBlock Text="{Binding ArrivalTime}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="26" Margin="0, 0, 10, 0"></TextBlock>
+                                        <TextBlock Text="{Binding ArrivalCity}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="12" Margin="0, 0, 10, 0" Foreground="#FF959AA2"></TextBlock>
+                                        <TextBlock Text="{Binding ArrivalDate}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="12" Margin="0, 0, 10, 0" Foreground="#FF959AA2"></TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- Second flight info StackPanel -->
+                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Hidden">
+
+                                    <!-- Departure info StackPanel -->
+                                    <StackPanel Width="100" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                                        <TextBlock Text="{Binding DepartureTime_r}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="26" Margin="0, 0, 10, 0"></TextBlock>
+                                        <TextBlock Text="{Binding DepartureCity_r}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="12" Margin="0, 0, 10, 0" Foreground="#FF959AA2"></TextBlock>
+                                        <TextBlock Text="{Binding DepartureDate_r}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="12" Margin="0, 0, 10, 0" Foreground="#FF959AA2"></TextBlock>
+                                    </StackPanel>
+
+                                    <!-- Flight spot info StackPanel -->
+                                    <Grid Width="320">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="11*"/>
+                                            <RowDefinition Height="5*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Text="{Binding InFlight_r}" FontSize="12" Width="88" TextAlignment="Center" Foreground="#FF959AA2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0"></TextBlock>
+
+                                        <Image Source="Resources/flight_icon.png" Stretch="UniformToFill" VerticalAlignment="Center" Height="44" Panel.ZIndex="-1"/>
+
+                                        <TextBlock Text="{Binding DepartureCode_r}" FontSize="12" Grid.Row="1" Width="30" TextAlignment="Left" Margin="17,0,360,0" Foreground="#FF959AA2"></TextBlock>
+                                        <TextBlock Text="{Binding ArrivalCode_r}" FontSize="12" Grid.Row="1" Width="30" TextAlignment="Right" Margin="371,0,6,0" Foreground="#FF959AA2"></TextBlock>
+                                    </Grid>
+
+                                    <!-- Arrival info StackPanel -->
+                                    <StackPanel Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                                        <TextBlock Text="{Binding ArrivalTime_r}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="26" Margin="0, 0, 10, 0"></TextBlock>
+                                        <TextBlock Text="{Binding ArrivalCity_r}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="12" Margin="0, 0, 10, 0" Foreground="#FF959AA2"></TextBlock>
+                                        <TextBlock Text="{Binding ArrivalDate_r}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="12" Margin="0, 0, 10, 0" Foreground="#FF959AA2"></TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </ScrollViewer>
+</Window>
